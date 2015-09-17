@@ -16,8 +16,7 @@ public class MorseCodeTest {
 	@Test
 	public void testDecode() {
 
-		Assert.assertEquals(
-				m.decode(".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-"),
+		Assert.assertEquals(m.decode(".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-"),
 				"hello how are you");
 	}
 

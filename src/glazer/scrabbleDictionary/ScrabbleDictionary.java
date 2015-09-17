@@ -25,9 +25,6 @@ public class ScrabbleDictionary {
 	 *         doesn't exist
 	 */
 	public boolean contains(String word) {
-		if (this.dictionary.contains(word.toLowerCase())) {
-			return true;
-		}
-		return false;
+		return this.dictionary.contains(word.toLowerCase());
 	}
 }
