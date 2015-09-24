@@ -9,15 +9,15 @@ public class MorseCodeTest {
 	@Test
 	public void testEncode() {
 
-		Assert.assertEquals(m.encode("Hello how are you"),
-				".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-");
+		Assert.assertEquals(".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-",
+				m.encode("Hello how are you"));
 	}
 
 	@Test
 	public void testDecode() {
 
-		Assert.assertEquals(m.decode(".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-"),
-				"hello how are you");
+		Assert.assertEquals("hello how are you",
+				m.decode(".... . .-.. .-.. ---   .... --- .--   .- .-. .   -.-- --- ..-"));
 	}
 
 }

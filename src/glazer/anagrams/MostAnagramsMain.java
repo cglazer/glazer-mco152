@@ -1,25 +1,27 @@
 package glazer.anagrams;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class MostAnagramsMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SortedWord sw = new SortedWord();
-		Scanner inputFile;
+
+		BufferedReader inputFile;
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		HashMap<String, String> wordsWSort = new HashMap<String, String>();
-		String word = null;
+
 		String sortedWord = null;
+
 		try {
-			inputFile = new Scanner(new File("US.dic"));
-			while (inputFile.hasNext()) {
-				word = inputFile.next();
+			inputFile = new BufferedReader(new FileReader("US.dic"));
+			String word;
+			while ((word = inputFile.readLine()) != null) {
 				sortedWord = sw.sort(word);
 				wordsWSort.put(word, sortedWord);
 				if (!(map.containsKey(sortedWord))) {
@@ -29,11 +31,12 @@ public class MostAnagramsMain {
 					map.put(sortedWord, value + 1);
 				}
 			}
-
-		} catch (FileNotFoundException e) {
+			inputFile.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		int highest = 0;
 		String same = null;
 		for (Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -48,4 +51,5 @@ public class MostAnagramsMain {
 			}
 		}
 	}
+
 }
