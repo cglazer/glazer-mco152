@@ -20,12 +20,15 @@ public class ProjectileComponent extends JComponent {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		Projectile p = new Projectile(31, 20, 0);
+		double nextX = p.getX();
+		double nextY = getHeight() - p.getY();
 		for (int i = 1; i <= 20; i++) {
-			double x = p.getX();
-			double y = p.getY();
+			double x = nextX;
+			double y = nextY;
 			p.setTime(i);
-			g2d.draw(new Line2D.Double(x, (getHeight() - y), p.getX(),
-					(getHeight() - p.getY())));
+			nextX = p.getX();
+			nextY = getHeight() - p.getY();
+			g2d.draw(new Line2D.Double(x, y, nextX, nextY));
 		}
 	}
 }

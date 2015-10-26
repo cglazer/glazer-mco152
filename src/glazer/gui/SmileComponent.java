@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 
 public class SmileComponent extends JComponent {
-
 	/**
 	 * 
 	 */
@@ -15,7 +14,6 @@ public class SmileComponent extends JComponent {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// g.drawOval(200, 100, 400, 400);
 		g.setColor(Color.yellow);
 		g.fillOval(200, 130, 400, 400);
 		g.setColor(Color.BLUE);
@@ -32,7 +30,7 @@ public class SmileComponent extends JComponent {
 		g.fillRect(250, 115, 300, 50);
 		g.fillRect(335, 35, 130, 130);
 		g.setColor(Color.darkGray);
-		// g.drawArc(375, 275, 40, 40, 0, 190);
+		g.drawArc(375, 275, 40, 40, 0, 190);
 
 	}
 
