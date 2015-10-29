@@ -19,10 +19,13 @@ public class ProjectileComponent extends JComponent {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		Projectile p = new Projectile(31, 20, 0);
+		double angle = 31;
+		double velocity = 20;
+		double time = 0;
+		Projectile p = new Projectile(angle, velocity, time);
 		double nextX = p.getX();
 		double nextY = getHeight() - p.getY();
-		for (int i = 1; i <= 20; i++) {
+		for (double i = .5; i <= 20; i = i + .5) {
 			double x = nextX;
 			double y = nextY;
 			p.setTime(i);
