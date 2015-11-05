@@ -15,7 +15,6 @@ public class SmileJFrame extends JFrame {
 		setTitle("Smile");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		BorderLayout layout = new BorderLayout();
 		Container container = getContentPane();
 		container.setLayout(layout);

@@ -8,8 +8,7 @@ import org.junit.Test;
 public class ScrabbleDictionaryTest {
 	@Test
 	public void testContains() throws IOException {
-		ScrabbleDictionary s = new ScrabbleDictionary();
-
+		ScrabbleDictionary s = ScrabbleDictionary.getInstance();
 		Assert.assertTrue(s.contains("Hello"));
 	}
 

@@ -16,6 +16,5 @@ public class UniqueStrings {
 			}
 			set.add(s);
 		}
-
 	}
 }

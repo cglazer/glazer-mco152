@@ -15,9 +15,7 @@ public class MostAnagramsMain {
 		BufferedReader inputFile;
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		HashMap<String, String> wordsWSort = new HashMap<String, String>();
-
 		String sortedWord = null;
-
 		try {
 			inputFile = new BufferedReader(new FileReader("US.dic"));
 			String word;

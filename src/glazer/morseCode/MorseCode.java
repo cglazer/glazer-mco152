@@ -30,6 +30,7 @@ public class MorseCode {
 	public String encode(String message) {
 		StringBuilder code = new StringBuilder();
 		for (int i = 0; i < message.length(); i++) {
+			// if(encode.containsKey(message.charAt(i))
 			for (Map.Entry<Character, String> entry : encode.entrySet()) {
 				if (message.toLowerCase().charAt(i) == entry.getKey()) {
 					if (i == 0 || message.charAt(i - 1) == ' ') {

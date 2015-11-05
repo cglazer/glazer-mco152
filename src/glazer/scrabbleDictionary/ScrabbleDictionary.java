@@ -7,9 +7,23 @@ import java.util.HashSet;
 
 public class ScrabbleDictionary {
 
+	private static ScrabbleDictionary singleton;// not the static variable!
+
+	public static ScrabbleDictionary getInstance() {
+		if (singleton == null) {
+			try {
+				singleton = new ScrabbleDictionary();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return singleton;
+	}
+
 	private HashSet<String> dictionary;
 
-	public ScrabbleDictionary() throws IOException {
+	private ScrabbleDictionary() throws IOException {
 		this.dictionary = new HashSet<String>();
 		String line;
 		try {
