@@ -29,9 +29,9 @@ public class AirplaneSeats {
 		for (int i = 1; i < rows; i++) {
 			for (int x = 65; x <= 65 + this.columns; x++) {
 				StringBuilder seat = new StringBuilder();
-				seat.append(i);
-				seat.append(String.valueOf((char) x));
 
+				seat.append(String.valueOf((char) x));
+				seat.append(i);
 				this.map.put(seat.toString(), false);
 			}
 		}

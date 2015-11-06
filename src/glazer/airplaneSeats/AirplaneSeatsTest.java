@@ -34,8 +34,8 @@ public class AirplaneSeatsTest {
 	 */
 	public void testReserve() throws AlreadyReservedException, SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(3, 4);
-		seats.reserve("1A");
-		Assert.assertTrue(seats.isReserved("1A"));
+		seats.reserve("A1");
+		Assert.assertTrue(seats.isReserved("A1"));
 	}
 
 	@Test
@@ -47,8 +47,8 @@ public class AirplaneSeatsTest {
 	public void testReserveThrowsAlreadyReservedException() throws SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(2, 2);
 		try {
-			seats.reserve("1A");
-			seats.reserve("1A");
+			seats.reserve("A1");
+			seats.reserve("A1");
 			Assert.fail("exception didn't work");
 		} catch (AlreadyReservedException e) {
 			// This is expected so catch it so the test passes
@@ -63,7 +63,7 @@ public class AirplaneSeatsTest {
 	public void testReserveThrowsSeatOutOfBoundsException() throws AlreadyReservedException {
 		AirplaneSeats seats = new AirplaneSeats(2, 2);
 		try {
-			seats.reserve("3B");
+			seats.reserve("B3");
 			Assert.fail("Test did not work");
 		} catch (SeatOutOfBoundsException e) {
 
@@ -94,7 +94,7 @@ public class AirplaneSeatsTest {
 	 */
 	public void testReserveGroupOnEmptyPlane() throws NotEnoughSeatsException {
 		AirplaneSeats seats = new AirplaneSeats(10, 5);
-		Assert.assertEquals(new String[] { "1A", "1B", "1C" }, seats.reserveGroup(3));
+		Assert.assertEquals(new String[] { "A1", "B1", "C1" }, seats.reserveGroup(3));
 	}
 
 	@Test
@@ -107,7 +107,7 @@ public class AirplaneSeatsTest {
 			SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(4, 4);
 		seats.reserve("1A");
-		Assert.assertEquals(new String[] { "2A", "2B", "2C" }, seats.reserveGroup(3));
+		Assert.assertEquals(new String[] { "A2", "B2", "C2" }, seats.reserveGroup(3));
 	}
 
 	@Test
