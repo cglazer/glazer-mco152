@@ -1,5 +1,7 @@
 package glazer.airplaneSeats;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +14,8 @@ public class AirplaneSeatsTest {
 	// done
 	public void testToStringWithEmptyPlane() {
 		AirplaneSeats seats = new AirplaneSeats(3, 4);
-		Assert.assertEquals("  ABCD\n" + "1 oooo\n" + "2 oooo\n" + "3 oooo\n", seats.toString());
+		Assert.assertEquals("  ABCD\n" + "1 oooo\n" + "2 oooo\n" + "3 oooo\n",
+				seats.toString());
 	}
 
 	@Test
@@ -20,19 +23,22 @@ public class AirplaneSeatsTest {
 	 * Test the output of toString() on an full plane. Do not modify this method.
 	 */
 	// done
-	public void testToStringWithFullPlane() throws AlreadyReservedException, SeatOutOfBoundsException {
+	public void testToStringWithFullPlane() throws AlreadyReservedException,
+			SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(3, 4);
 		seats.reserveAll("A1", "B1", "C1", "D1");
 		seats.reserveAll("A2", "B2", "C2", "D2");
 		seats.reserveAll("A3", "B3", "C3", "D3");
-		Assert.assertEquals("  ABCD\n" + "1 ####\n" + "2 ####\n" + "3 ####\n", seats.toString());
+		Assert.assertEquals("  ABCD\n" + "1 ####\n" + "2 ####\n" + "3 ####\n",
+				seats.toString());
 	}
 
 	@Test
 	/**
 	 * Tests that reserve() reserves a seat correctly.
 	 */
-	public void testReserve() throws AlreadyReservedException, SeatOutOfBoundsException {
+	public void testReserve() throws AlreadyReservedException,
+			SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(3, 4);
 		seats.reserve("A1");
 		Assert.assertTrue(seats.isReserved("A1"));
@@ -44,7 +50,8 @@ public class AirplaneSeatsTest {
 	 * a seat twice. Do not modify this method.
 	 */
 	// done
-	public void testReserveThrowsAlreadyReservedException() throws SeatOutOfBoundsException {
+	public void testReserveThrowsAlreadyReservedException()
+			throws SeatOutOfBoundsException {
 		AirplaneSeats seats = new AirplaneSeats(2, 2);
 		try {
 			seats.reserve("A1");
@@ -60,7 +67,8 @@ public class AirplaneSeatsTest {
 	 * Tests that reserve() will thrown a SeatOutOfBoundsException is you attempt to reserve
 	 * a seat that is outside the bounds of the plane. 
 	 */
-	public void testReserveThrowsSeatOutOfBoundsException() throws AlreadyReservedException {
+	public void testReserveThrowsSeatOutOfBoundsException()
+			throws AlreadyReservedException {
 		AirplaneSeats seats = new AirplaneSeats(2, 2);
 		try {
 			seats.reserve("B3");
@@ -94,7 +102,11 @@ public class AirplaneSeatsTest {
 	 */
 	public void testReserveGroupOnEmptyPlane() throws NotEnoughSeatsException {
 		AirplaneSeats seats = new AirplaneSeats(10, 5);
-		Assert.assertEquals(new String[] { "A1", "B1", "C1" }, seats.reserveGroup(3));
+		ArrayList<String> array = new ArrayList<String>();
+		array.add("A1");
+		array.add("B1");
+		array.add("C1");
+		Assert.assertEquals(array, seats.reserveGroup(3));
 	}
 
 	@Test
@@ -103,11 +115,16 @@ public class AirplaneSeatsTest {
 	 * seats already reserved. For instance, on a 3,4 airplane whose "A1" is occupied, 
 	 * calling reserveGroup(4) should return a list of elements ["A2", "B2", "C2", "D2"]
 	 */
-	public void testReserveGroupOnPartiallyFilledPlane() throws NotEnoughSeatsException, AlreadyReservedException,
+	public void testReserveGroupOnPartiallyFilledPlane()
+			throws NotEnoughSeatsException, AlreadyReservedException,
 			SeatOutOfBoundsException {
-		AirplaneSeats seats = new AirplaneSeats(4, 4);
-		seats.reserve("1A");
-		Assert.assertEquals(new String[] { "A2", "B2", "C2" }, seats.reserveGroup(3));
+		AirplaneSeats seats = new AirplaneSeats(3, 4);
+		seats.reserve("A1");
+		ArrayList<String> array = new ArrayList<String>();
+		array.add("A2");
+		array.add("B2");
+		array.add("C2");
+		Assert.assertEquals(array, seats.reserveGroup(3));
 	}
 
 	@Test

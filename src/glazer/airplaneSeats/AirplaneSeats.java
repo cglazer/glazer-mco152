@@ -26,12 +26,11 @@ public class AirplaneSeats {
 		this.rows = rows;
 		this.columns = columns;
 		// decide how big plane is
-		for (int i = 1; i < rows; i++) {
-			for (int x = 65; x <= 65 + this.columns; x++) {
+		for (int i = 0; i < rows; i++) {
+			for (int x = 65; x <= 64 + this.columns; x++) {
 				StringBuilder seat = new StringBuilder();
-
 				seat.append(String.valueOf((char) x));
-				seat.append(i);
+				seat.append(i + 1);
 				this.map.put(seat.toString(), false);
 			}
 		}
@@ -47,7 +46,8 @@ public class AirplaneSeats {
 	 *             if the seat is outside the columns and rows set in the
 	 *             constructor
 	 */
-	public void reserve(String seatName) throws AlreadyReservedException, SeatOutOfBoundsException {
+	public void reserve(String seatName) throws AlreadyReservedException,
+			SeatOutOfBoundsException {
 		if (!(this.map.containsKey(seatName))) {
 			throw new SeatOutOfBoundsException();
 		}
@@ -81,7 +81,8 @@ public class AirplaneSeats {
 	 *             if one of the seats is outside the columns and rows set in
 	 *             the constructor
 	 */
-	public void reserveAll(String... seatNames) throws AlreadyReservedException, SeatOutOfBoundsException {
+	public void reserveAll(String... seatNames)
+			throws AlreadyReservedException, SeatOutOfBoundsException {
 		// to reserve a bunch of seats//does not need to be modified
 		for (String seatName : seatNames) {
 			reserve(seatName);
@@ -104,29 +105,24 @@ public class AirplaneSeats {
 		// return a string in the above format letters...a map of the plane
 		StringBuilder setup = new StringBuilder();
 		setup.append("  ");
-		for (int x = 65; x <= 65 + this.columns; x++) {
-			setup.append(String.valueOf(x));
+		for (int x = 65; x <= 64 + this.columns; x++) {
+			setup.append(String.valueOf((char) x));
 		}
-		setup.append("\n1 ");
-		int columnCounter = 0;
-		int rowCounter = 1;
+		setup.append("\n");
+		for (int i = 0; i < rows; i++) {
+			setup.append(i + 1 + " ");
+			for (int x = 65; x <= 64 + this.columns; x++) {
+				StringBuilder seat = new StringBuilder();
 
-		for (Map.Entry<String, Boolean> seats : this.map.entrySet()) {
-			if (columnCounter == columns) {
-				rowCounter++;
-				setup.append("\n");
-				setup.append(rowCounter);
-				setup.append(" ");
-				columnCounter = 0;
-
+				seat.append(String.valueOf((char) x));
+				seat.append(i + 1);
+				if (this.map.get(seat.toString())) {
+					setup.append("#");
+				} else {
+					setup.append("o");
+				}
 			}
-			if (map.get(seats)) {
-				setup.append("#");
-			} else {
-				setup.append("o");
-			}
-			columnCounter++;
-
+			setup.append("\n");
 		}
 		return setup.toString();
 	}
@@ -142,7 +138,8 @@ public class AirplaneSeats {
 	 * @throws NotEnoughSeatsException
 	 *             if there are not enough seats together to reserve.
 	 */
-	public ArrayList<String> reserveGroup(int numberOfSeatsTogether) throws NotEnoughSeatsException {
+	public ArrayList<String> reserveGroup(int numberOfSeatsTogether)
+			throws NotEnoughSeatsException {
 		ArrayList<String> reservedSeats = new ArrayList<String>();
 		// want seats next to eachother
 		// each string is a seatname
@@ -150,30 +147,26 @@ public class AirplaneSeats {
 		if (numberOfSeatsTogether > totalSeats) {
 			throw new NotEnoughSeatsException();
 		}
-		int available = 0;
-		for (Map.Entry<String, Boolean> seats : this.map.entrySet()) {
-			if (!seats.getValue()) {
-				if (available == 0) {
-					if (seats.getKey().charAt(1) == 'A') {
-						reservedSeats.add(seats.getKey());
-						available++;
+
+		for (int i = 0; i < rows; i++) {
+			for (int x = 65; x <= 64 + this.columns; x++) {
+				StringBuilder seat = new StringBuilder();
+				seat.append(String.valueOf((char) x));
+				seat.append(i + 1);
+				if (!this.map.get(seat.toString())) {
+					reservedSeats.add(seat.toString());
+					if (reservedSeats.size() == numberOfSeatsTogether) {
+						return reservedSeats;
 					}
 				} else {
-					reservedSeats.add(seats.getKey());
-					available++;
+					reservedSeats.clear();
+					break;
 				}
-			} else {
-				available = 0;
-				reservedSeats.clear();
 			}
-			if (available == numberOfSeatsTogether) {
-				for (String reserved : reservedSeats) {
-					this.map.put(reserved, true);
-				}
-				return reservedSeats;
-			}
+
 		}
 		throw new NotEnoughSeatsException();
+
 	}
 
 	/**
