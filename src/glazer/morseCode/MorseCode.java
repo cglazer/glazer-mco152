@@ -1,7 +1,6 @@
 package glazer.morseCode;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class MorseCode {
 	private char[] alphabet;
@@ -30,18 +29,12 @@ public class MorseCode {
 	public String encode(String message) {
 		StringBuilder code = new StringBuilder();
 		for (int i = 0; i < message.length(); i++) {
-			// if(encode.containsKey(message.charAt(i))
-			for (Map.Entry<Character, String> entry : encode.entrySet()) {
-				if (message.toLowerCase().charAt(i) == entry.getKey()) {
-					if (i == 0 || message.charAt(i - 1) == ' ') {
-						code.append(entry.getValue());
-						break;
-					} else {
-						code.append(" ");
-						code.append(entry.getValue());
-						break;
-					}
-				}
+			String m = encode.get(message.toLowerCase().charAt(i));
+			if (i == 0 || message.charAt(i - 1) == ' ') {
+				code.append(m);
+			} else {
+				code.append(" ");
+				code.append(m);
 			}
 		}
 		return code.toString();
@@ -53,12 +46,8 @@ public class MorseCode {
 		for (int y = 0; y < messageWords.length; y++) {
 			String[] wordLetters = messageWords[y].split(" ");
 			for (int i = 0; i < wordLetters.length; i++) {
-				for (Map.Entry<String, Character> entry : decode.entrySet()) {
-					if (wordLetters[i].equals(entry.getKey())) {
-						message.append(entry.getValue());
-						break;
-					}
-				}
+				char m = decode.get(wordLetters[i]);
+				message.append(m);
 			}
 			if (messageWords.length - 1 > y) {
 				message.append(" ");
