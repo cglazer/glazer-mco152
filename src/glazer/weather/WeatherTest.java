@@ -22,8 +22,10 @@ public class WeatherTest {
 		InputStream in = connection.getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		Gson gson = new Gson();
-		WeatherReport info = gson.fromJson(reader, WeatherReport.class);
-		Assert.assertEquals(info.getName(), "Monsey");
+		try {
+			WeatherReport info = gson.fromJson(reader, WeatherReport.class);
+		} catch (IllegalArgumentException e) {
+			Assert.fail();
+		}
 	}
-
 }

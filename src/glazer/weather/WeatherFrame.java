@@ -91,7 +91,8 @@ public class WeatherFrame extends JFrame {
 		this.invalid.setForeground(Color.RED);
 		this.text.setBounds(450, 450, 100, 100);
 		this.cityName.setFont(new Font("Serif", Font.BOLD, 55));
-		this.temp.setForeground(Color.BLUE);
+		this.cityName.setForeground(Color.BLUE);
+		this.temp.setForeground(Color.RED);
 		this.temp.setFont(new Font("Serif", Font.BOLD, 100));
 		addComponents();
 	}
@@ -154,7 +155,6 @@ public class WeatherFrame extends JFrame {
 		// this will return for us a list of ufo sightings
 		WeatherReport info = gson.fromJson(reader, WeatherReport.class);
 		if (info.getMain() == null) {
-			System.out.println("null");
 			invalid.setText("Invalid Zip Code");
 		} else {
 			Weather[] weather = info.getWeather();
