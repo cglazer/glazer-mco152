@@ -7,15 +7,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -24,8 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import com.google.gson.Gson;
 
 public class WeatherFrame extends JFrame {
 	/**
@@ -62,8 +53,7 @@ public class WeatherFrame extends JFrame {
 		this.searchButton = new JButton();
 		this.search = new ImageIcon(this.getClass().getResource("search.png"));
 		this.img = search.getImage();
-		this.newimg = img
-				.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+		this.newimg = img.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
 		this.search = new ImageIcon(newimg);
 		this.zipText = new JTextField("ENTER ZIP");
 		this.invalid = new JLabel();
@@ -84,7 +74,7 @@ public class WeatherFrame extends JFrame {
 		this.listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
 		this.searchButton.setIcon(search);
 		this.searchButton.setBounds(445, 0, 40, 40);
-		this.zipText.setBounds(346, 0, 100, 40);
+		this.zipText.setBounds(346, 0, 105, 40);
 		this.zipText.setFont(new Font("SansSerif", Font.PLAIN, 20));
 		this.zipText.setForeground(Color.blue);
 		this.invalid.setBounds(220, 0, 100, 40);
@@ -98,6 +88,12 @@ public class WeatherFrame extends JFrame {
 	}
 
 	public void addComponents() {
+		/**
+		 * try { this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new
+		 * File("Sky-Blue-Sky.jpg")))));
+		 * 
+		 * } catch (IOException e) { } ;
+		 */
 		this.container.add(zipText);
 		this.container.add(invalid);
 		this.container.add(text);
@@ -115,84 +111,15 @@ public class WeatherFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// call the instructions screen
-
-				String zip = zipText.getText();
-				String regex = "\\d{5}";
-				Pattern pattern = Pattern.compile(regex);
-				Matcher matcher = pattern.matcher(zip);
-				if (matcher.matches()) {
-					invalid.setText("");
-					try {
-						DisplayInfo(zip);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				} else {
-					invalid.setText("Invalid Zip Code");
-
-				}
+				container = getContentPane();
+				WeatherThread thread = new WeatherThread(zipText.getText(), invalid, container, imageURL, weatherIcon,
+						img, newimg, imageLabel, cityName, temp, shortDescription, tempMin, humidity, windSpeed);
+				thread.start();
+				// String zip = zipText.getText();
 
 			}
 		});
 
 	}
 
-	public void DisplayInfo(String zip) throws IOException {
-		this.container = this.getContentPane();
-		this.container.setLayout(null);
-		StringBuilder zipBuilder = new StringBuilder();
-		zipBuilder
-				.append("http://api.openweathermap.org/data/2.5/weather?zip=");
-		zipBuilder.append(zip);
-		zipBuilder
-				.append(",us&appid=2de143494c0b295cca9337e1e96b00e0&units=imperial");
-		URL url = new URL(zipBuilder.toString());
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		InputStream in = connection.getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		Gson gson = new Gson();
-		// this will return for us a list of ufo sightings
-		WeatherReport info = gson.fromJson(reader, WeatherReport.class);
-		if (info.getMain() == null) {
-			invalid.setText("Invalid Zip Code");
-		} else {
-			Weather[] weather = info.getWeather();
-			StringBuilder pic = new StringBuilder();
-			pic.append("http://openweathermap.org/img/w/");
-			pic.append(weather[0].getIcon());
-			pic.append(".png");
-			this.imageURL = new URL(pic.toString());
-			this.weatherIcon = new ImageIcon(imageURL);
-			this.img = weatherIcon.getImage();
-			this.newimg = img.getScaledInstance(75, 75,
-					java.awt.Image.SCALE_SMOOTH);
-			this.weatherIcon = new ImageIcon(newimg);
-			this.imageLabel.setIcon(weatherIcon);
-			this.cityName.setText(info.getName().toUpperCase());
-			StringBuilder temps = new StringBuilder();
-			temps.append(String.valueOf((int) info.getMain().getTemp()));
-			temps.append("\u2109");
-			this.temp.setText(temps.toString());
-			this.shortDescription.setText(weather[0].getMain());
-			StringBuilder minTemp = new StringBuilder();
-			minTemp.append("L: ");
-			minTemp.append(String.valueOf(info.getMain().getTemp_min()));
-			minTemp.append("\u2109      / H: ");
-			minTemp.append(String.valueOf(info.getMain().getTemp_max()));
-			minTemp.append("\u2109");
-			this.tempMin.setText(minTemp.toString());
-			StringBuilder humid = new StringBuilder();
-			humid.append("Humidity:           ");
-			humid.append(String.valueOf(info.getMain().getHumidity()));
-			humid.append("%");
-			this.humidity.setText(humid.toString());
-			StringBuilder wind = new StringBuilder();
-			wind.append("Wind Speed:     ");
-			wind.append(String.valueOf(info.getWind().getSpeed()));
-			wind.append(" MPH");
-			this.windSpeed.setText(wind.toString());
-		}
-		repaint();
-	}
 }
