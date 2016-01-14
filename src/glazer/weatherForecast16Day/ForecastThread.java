@@ -9,14 +9,12 @@ import java.net.URL;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import com.google.gson.Gson;
 
 public class ForecastThread extends Thread {
-	private JButton[] panelWeek1;
-	private JButton[] panelWeek2;
+	// private JButton[] panelWeek1;
 	private JLabel cityName;
 	private JLabel todayTemp;
 	private JLabel todayMinMax;
@@ -29,13 +27,20 @@ public class ForecastThread extends Thread {
 	private WeatherReport info;
 	private List[] day;
 	private int centerDay;
+	private SimpleDateFormat format;
+	private Date dates;
+	private JLabel nightTemp;
+	private JLabel mornTemp;
+	private JLabel[] tempLabel;
+	private JLabel[] dateLabel;
+	private JLabel[] iconLabel;
+	private IconThread iThread;
 
-	public ForecastThread(JButton[] panelWeek1, JButton[] panelWeek2,
-			JLabel cityName, JLabel todayTemp, JLabel todayMinMax,
-			JLabel todayHumidity, JLabel todayWind, JLabel todayIcon,
-			JLabel description, JLabel date, String zip, int centerDay) {
-		this.panelWeek1 = panelWeek1;
-		this.panelWeek2 = panelWeek2;
+	public ForecastThread(JLabel cityName, JLabel todayTemp,
+			JLabel todayMinMax, JLabel todayHumidity, JLabel todayWind,
+			JLabel todayIcon, JLabel description, JLabel date, String zip,
+			JLabel nightTemp, JLabel mornTemp, int centerDay,
+			JLabel[] tempLabel, JLabel[] dateLabel, JLabel[] iconLabel) {
 		this.cityName = cityName;
 		this.todayTemp = todayTemp;
 		this.todayMinMax = todayMinMax;
@@ -46,16 +51,20 @@ public class ForecastThread extends Thread {
 		this.date = date;
 		this.centerDay = centerDay;
 		this.zip = zip;
+		this.format = new SimpleDateFormat("EEE, MMM d");
+		this.nightTemp = nightTemp;
+		this.mornTemp = mornTemp;
+		this.tempLabel = tempLabel;
 
+		this.dateLabel = dateLabel;
+		this.iconLabel = iconLabel;
 	}
 
 	@Override
 	public void run() {
-
 		String forecastURL = "http://api.openweathermap.org/data/2.5/forecast/daily?q="
 				+ this.zip
 				+ "&units=imperial&cnt=16&appid=2de143494c0b295cca9337e1e96b00e0";
-
 		InputStream in = null;
 		try {
 			URL url = new URL(forecastURL);
@@ -75,23 +84,24 @@ public class ForecastThread extends Thread {
 		} else {
 			setCenter();
 
-			for (int i = 0; i < 8; i++) {
-				panelWeek1[i].setText(String.valueOf((int) day[i].getTemp()
-						.getDay()) + "\u2109");
-				panelWeek2[i].setText(String.valueOf((int) day[i + 8].getTemp()
-						.getDay()) + "\u2109");
-			}
-			IconThread iThread;
 			for (int i = 0; i < 16; i++) {
-				Weather[] weather = day[i].getWeather();
+				Weather[] weather = this.day[i].getWeather();
 				if (i < 8) {
-					iThread = new IconThread(weather[0].getIcon(),
-							panelWeek1[i]);
-					iThread.start();
+					this.tempLabel[i].setText(String.valueOf((int) this.day[i]
+							.getTemp().getDay()) + "\u2109");
+					this.dates = new Date(this.day[i].getDt() * 1000);
+					this.dateLabel[i].setText(this.format.format(this.dates));
+					this.iThread = new IconThread(weather[0].getIcon(),
+							this.iconLabel[i], 1);
+					this.iThread.start();
 				} else {
-					iThread = new IconThread(weather[0].getIcon(),
-							panelWeek2[i - 8]);
-					iThread.start();
+					this.tempLabel[i].setText(String.valueOf((int) day[i]
+							.getTemp().getDay()) + "\u2109");
+					this.dates = new Date(this.day[i].getDt() * 1000);
+					this.dateLabel[i].setText(this.format.format(this.dates));
+					this.iThread = new IconThread(weather[0].getIcon(),
+							this.iconLabel[i], 1);
+					this.iThread.start();
 				}
 			}
 
@@ -100,28 +110,30 @@ public class ForecastThread extends Thread {
 
 	public void setCenter() {
 		this.cityName.setText(info.getCity().getName());
-
 		Date todayDate = new Date(day[centerDay].getDt() * 1000);
-		SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d");
-		this.date.setText(format.format(todayDate));
+		this.date.setText(this.format.format(todayDate));
 		this.todayHumididy.setText("Humidity: "
-				+ String.valueOf(day[centerDay].getHumidity()) + "%");
+				+ String.valueOf(this.day[this.centerDay].getHumidity()) + "%");
+		this.nightTemp.setText("Night Temp: "
+				+ String.valueOf(this.day[this.centerDay].getTemp().getNight())
+				+ "\u2109");
+		this.mornTemp.setText("Morning Temp: "
+				+ String.valueOf(this.day[this.centerDay].getTemp().getMorn())
+				+ "\u2109");
+
 		this.todayWind.setText("Wind Speed: "
-				+ String.valueOf(day[this.centerDay].getSpeed()));
-		Weather[] todayWeather = day[this.centerDay].getWeather();
+				+ String.valueOf(this.day[this.centerDay].getSpeed()) + " MPH");
+		Weather[] todayWeather = this.day[this.centerDay].getWeather();
 		IconThread iconThread = new IconThread(todayWeather[0].getIcon(),
-				this.todayIcon);
+				this.todayIcon, 0);
 		iconThread.start();
 		this.description.setText(todayWeather[0].getMain());
-		System.out.println(todayWeather[0].getIcon());
-
-		this.todayTemp.setText(String.valueOf((int) day[this.centerDay]
+		this.todayTemp.setText(String.valueOf((int) this.day[this.centerDay]
 				.getTemp().getDay()) + "\u2109");
-		this.todayMinMax
-				.setText("L: "
-						+ String.valueOf(day[this.centerDay].getTemp().getMin()
-								+ "   / H: "
-								+ String.valueOf(day[this.centerDay].getTemp()
-										.getMax())));
+		this.todayMinMax.setText("L: "
+				+ String.valueOf(this.day[this.centerDay].getTemp().getMin()
+						+ "   / H: "
+						+ String.valueOf(this.day[this.centerDay].getTemp()
+								.getMax())));
 	}
 }

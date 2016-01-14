@@ -81,7 +81,9 @@ public class ContactThread extends Thread {
 				JList<?> list = (JList<?>) evt.getSource();
 				if (evt.getClickCount() == 2) {
 					// Double-click detected
-					int index = list.locationToIndex(evt.getPoint());
+
+					int index = list.getSelectedIndex();
+					// int index = list.locationToIndex(evt.getPoint());
 					Object o = list.getModel().getElementAt(index);
 
 					ContactInfo info = new ContactInfo(o, contacts);

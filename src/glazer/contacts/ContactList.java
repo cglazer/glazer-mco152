@@ -20,7 +20,7 @@ public class ContactList extends JFrame {
 	private JScrollPane listScroller;
 
 	public ContactList() {
-		setTitle("JFrameDemo");
+		setTitle("Contact List");
 		setSize(500, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

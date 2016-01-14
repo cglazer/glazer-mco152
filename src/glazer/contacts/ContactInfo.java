@@ -23,9 +23,9 @@ public class ContactInfo extends JFrame {
 	Container container;
 
 	public ContactInfo(Object o, Contacts[] contacts) {
-		setTitle("JFrameDemo");
+		setTitle("Contact Info");
 		setSize(500, 500);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.o = o;
 
 		this.contacts = contacts;
