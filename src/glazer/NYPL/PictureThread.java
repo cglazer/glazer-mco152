@@ -90,7 +90,8 @@ public class PictureThread extends Thread {
 		thread.start();
 		if (this.currentImageIndex == 0) {
 			this.previous.setEnabled(false);
-		} else if (this.currentImageIndex == this.numResults - 1) {
+		}
+		if (this.currentImageIndex == this.numResults - 1) {
 			this.next.setEnabled(false);
 		}
 	}

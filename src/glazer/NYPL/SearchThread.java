@@ -85,26 +85,6 @@ public class SearchThread extends Thread {
 		this.listBox.setModel(listModel);
 		me.setResult(result);
 
-		/**
-		 * MouseListener[] l = listBox.getMouseListeners(); for (int i = 0; i <
-		 * l.length; i++) { this.listBox.removeMouseListener(l[i]); }
-		 */
-		/**
-		 * listBox.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent evt) { JList<?> list =
-		 *           (JList<?>) evt.getSource(); if (evt.getClickCount() == 1) {
-		 *           // Double-click detected
-		 * 
-		 *           int index = list.getSelectedIndex(); // Object o =
-		 *           list.getModel().getElementAt(index);
-		 * 
-		 *           PictureThread picThread = new
-		 *           PictureThread(result[index].getApiItemURL(), icon,
-		 *           numOfNum, previous, next); picThread.start();
-		 * 
-		 *           } } });
-		 */
 	}
 
 }
