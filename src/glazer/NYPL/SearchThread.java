@@ -1,6 +1,5 @@
 package glazer.NYPL;
 
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,23 +21,15 @@ public class SearchThread extends Thread {
 	private ListModel<String> listModel;
 	private JList<String> listBox;
 	private Result[] result;
-	private JLabel icon;
 	private String searchTopic;
-	private JLabel numOfNum;
-	private JButton previous;
-	private JButton next;
-	private MouseListener adapt;
+
 	private NYPLFrame me;
 
 	public SearchThread(DefaultListModel<String> listModel, JList<String> listBox, JLabel icon, String searchTopic,
 			JLabel numOfNum, JButton previous, JButton next, NYPLFrame me) {
 		this.listModel = listModel;
 		this.listBox = listBox;
-		this.icon = icon;
 		this.searchTopic = searchTopic;
-		this.numOfNum = numOfNum;
-		this.previous = previous;
-		this.next = next;
 		this.me = me;
 
 	}
